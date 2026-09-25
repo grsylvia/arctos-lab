@@ -2,6 +2,28 @@
 
 Start with the included test piece. Print the arm in small batches after hardware fits correctly.
 
+**Arctos standard settings**
+
+From the official [Arctos print settings](https://arctosrobotics.com/docs/#print-settings), checked 2026-09-25:
+
+| Setting | Published baseline |
+| --- | --- |
+| Material | PLA; PETG may need adjustments |
+| Nozzle temperature | 215 °C; adjust for the filament brand |
+| Nozzle / extrusion width | 0.4 / 0.4 mm |
+| Layer height | 0.20 mm |
+| Infill | 35% |
+| Wall count | 4 |
+| Top / bottom layers | 4 / 4 |
+| Supports | Required on parts with unsupported features; inspect each part |
+
+| Local v2.9.7 resource | Additional detail |
+| --- | --- |
+| [Package instructions](../cad/2.9.7/3MF/readme.txt) | Minimum 4 walls / 35% infill; supports from the build plate where needed |
+| Bundled `2.9.7.3mf` | X1 Carbon / ASA, 0.42 mm default line width, 5 top / 3 bottom layers, Grid infill |
+
+Use the published PLA baseline for a fresh setup. The bundled project's differing values are saved settings, not the published PLA standard. Arctos's table does not specify bed temperature, speed, fan settings, or infill pattern; the P1S starting choices below are separate recommendations.
+
 | Your setup | Selection |
 | --- | --- |
 | Printer | Bambu Lab P1S, stock 0.4 mm stainless nozzle |
@@ -21,18 +43,19 @@ Hardware reference: [Bambu P1S specifications](https://au.store.bambulab.com/pro
 | 4 | Apply the settings below, then slice again. Inspect supports, first layers, and plate boundaries. |
 | 5 | Save your working 3MF and sliced files under `cad/prints/`. Export locally to microSD for printing; keep CAD, 3MF, and toolpaths out of Git and cloud uploads. |
 
-The package's [local instructions](cad/2.9.7/3MF/readme.txt) specify minimum **4 walls / 35% infill**, prepared orientations, and assembly-oriented plate order. Its stored profile uses 0.20 mm layers, 5 top layers, and 3 bottom layers. The remaining choices below are starting recommendations, not a tested PLA qualification.
+The package provides prepared orientations and assembly-oriented plate order. Check settings again after changing the printer or filament preset; the P1S choices below have not been physically validated.
 
-**Slicer settings**
+**P1S starting settings**
 
 | Setting | Starting value |
 | --- | --- |
 | Process | Compatible 0.20 mm Standard preset |
 | Layer height / first layer | 0.20 / 0.20 mm |
+| Default extrusion width | 0.40 mm published baseline; inspect any per-feature width overrides |
 | Wall loops | 4 minimum |
 | Infill | 35% minimum; Gyroid suggested (supplied profile uses Grid) |
-| Top / bottom layers | 5 / 3 |
-| Nozzle temperature | Matching Bambu PLA preset and spool guidance; never retain ASA temperatures |
+| Top / bottom layers | 4 / 4, matching the published baseline |
+| Nozzle temperature | Arctos baseline: 215 °C; adjust to the matching Bambu PLA preset and spool guidance |
 | Textured PEI bed | 55 °C starting point; Bambu lists 45–60 °C for PLA |
 | Cooling / flow limit | Matching Bambu PLA preset defaults |
 | Speed | Standard mode; avoid Sport/Ludicrous while establishing fit |
@@ -79,4 +102,4 @@ PLA has limited heat resistance: Bambu lists about 57 °C heat deflection for PL
 
 Record plate ID, filament grams, print time, and fit result locally under `cad/prints/`. Obtain material and time totals from your final slices; no full-build estimate has been verified.
 
-Reference checked 2026-09-25. The [Arctos documentation](https://arctosrobotics.com/docs/) blocked automated access; package-specific guidance above comes from the local v2.9.7 files. No slicing or physical print validation has been performed.
+Sources checked 2026-09-25: [Arctos documentation](https://arctosrobotics.com/docs/#print-settings) and local v2.9.7 package instructions/profile. The published baseline and P1S recommendations are distinguished above; no physical print validation of these recommendations has been performed.

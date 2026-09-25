@@ -12,7 +12,7 @@ Mesh assets and generated exports stay local under Git-ignored `cad/`.
 | Physics | Visual model only; no collision or inertial model |
 | Wrist fit | `B-core.stl` shifted +3 mm in X to align its bore with the carrier bores; assembly fit needs review |
 
-Build and generate the local model:
+Build the package and prepare local meshes:
 
 ```bash
 # Enter the workspace containing the source package and private CAD.
@@ -27,16 +27,17 @@ source install/local_setup.bash
 ros2 run arctos_description prepare_meshes.py \
   --cad-root "$PWD/cad/2.9.7" \
   --geometry "$PWD/src/arctos_description/config/geometry.yaml"
-# Expand the model with references to the private local mesh exports.
-xacro src/arctos_description/urdf/arctos.urdf.xacro \
-  mesh_dir:="$PWD/cad/2.9.7/urdf_meshes" \
-  -o cad/2.9.7/urdf_meshes/arctos.urdf
-# Validate the generated URDF and display its link hierarchy.
-check_urdf cad/2.9.7/urdf_meshes/arctos.urdf
+# Validate the explicit URDF and display its link hierarchy.
+check_urdf src/arctos_description/urdf/arctos.urdf
 ```
 
 `config/geometry.yaml` records source filenames, assembly-frame origins in mm, axes,
 and mesh alignment corrections. Re-run mesh preparation after changing geometry.
+Update the explicit URDF origins and axes to match any geometry changes.
+Joint offsets are (child origin − parent origin) / 1000, in metres.
+
+`urdf/arctos.urdf` can be loaded directly without Xacro. Its mesh paths use
+`package://arctos_description/meshes/`, which the build installs from `cad/2.9.7/urdf_meshes/`.
 All link frames initially share the STL assembly orientation: Z up, X toward the tool.
 
 | Joint | Axis | Source feature |

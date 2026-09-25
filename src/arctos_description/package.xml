@@ -13,8 +13,6 @@
   <license>Proprietary</license>
   <!-- Build and install the package with ament CMake. -->
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <!-- Expand model macros into a standard URDF. -->
-  <exec_depend>xacro</exec_depend>
   <!-- Read geometry settings in the mesh preparation script. -->
   <exec_depend>python3-yaml</exec_depend>
   <!-- Expose build metadata to ROS tooling. -->
