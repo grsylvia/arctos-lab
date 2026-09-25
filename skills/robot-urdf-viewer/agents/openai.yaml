@@ -1,0 +1,3 @@
+interface:
+  display_name: "Robot URDF Viewer"
+  short_description: "Build standalone 3D robot viewers from URDF"

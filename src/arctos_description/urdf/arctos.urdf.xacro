@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!-- Define the robot and enable Xacro macro expansion. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arctos">
+  <!-- Require the absolute path to the local private mesh directory. -->
+  <xacro:property name="mesh_dir" value="$(arg mesh_dir)"/>
+  <!-- Load measured link origins, joint axes, and source mesh assignments. -->
+  <xacro:property name="geometry"
+                  value="${xacro.load_yaml('$(find arctos_description)/config/geometry.yaml')}"/>
+
+  <!-- Give structural meshes a shared opaque blue-gray appearance. -->
+  <material name="structure"><color rgba="0.25 0.35 0.45 1"/></material>
+
+  <!-- Reuse the same visual definition for each named link. -->
+  <xacro:macro name="cad_link" params="name">
+    <!-- Create a rigid link with the requested name. -->
+    <link name="${name}">
+      <!-- Display the mesh without claiming collision or mass properties. -->
+      <visual>
+        <!-- Select the prepared STL as the visible shape. -->
+        <geometry>
+          <!-- Load a local mesh and convert millimetres to ROS metres. -->
+          <mesh filename="file://${mesh_dir}/${name}.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <!-- Apply the shared structural material. -->
+        <material name="structure"/>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <!-- Connect a child link using its measured assembly coordinates. -->
+  <xacro:macro name="cad_joint" params="child">
+    <!-- Read the child link's joint definition. -->
+    <xacro:property name="entry" value="${geometry[child]}"/>
+    <!-- Retrieve the parent origin in assembly millimetres. -->
+    <xacro:property name="p" value="${geometry[entry.parent].origin}"/>
+    <!-- Retrieve the child origin in the same assembly frame. -->
+    <xacro:property name="c" value="${entry.origin}"/>
+    <!-- Represent rotation about one measured axis. -->
+    <joint name="${entry.joint}" type="revolute">
+      <!-- Attach the joint to its upstream rigid link. -->
+      <parent link="${entry.parent}"/>
+      <!-- Identify the rigid link carried by this joint. -->
+      <child link="${child}"/>
+      <!-- Express the origin relative to the parent and convert to metres. -->
+      <origin xyz="${(c[0]-p[0])/1000} ${(c[1]-p[1])/1000} ${(c[2]-p[2])/1000}" rpy="0 0 0"/>
+      <!-- Set the rotation axis in the child's initial coordinate frame. -->
+      <axis xyz="${entry.axis[0]} ${entry.axis[1]} ${entry.axis[2]}"/>
+      <!-- Lock motion until hardware travel, effort, and speed are verified. -->
+      <limit lower="0" upper="0" effort="0" velocity="0"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- Create the stationary base housing. -->
+  <xacro:cad_link name="base_link"/>
+  <!-- Create the shoulder assembly carried by the base shaft. -->
+  <xacro:cad_link name="shoulder_link"/>
+  <!-- Create the arm structure between the shoulder and elbow axes. -->
+  <xacro:cad_link name="upper_arm_link"/>
+  <!-- Create the elbow structure supporting the wrist roll housing. -->
+  <xacro:cad_link name="elbow_link"/>
+  <!-- Create the rotating wrist carrier. -->
+  <xacro:cad_link name="wrist_roll_link"/>
+  <!-- Create the wrist pitch body. -->
+  <xacro:cad_link name="wrist_pitch_link"/>
+  <!-- Create the final rotating tool interface. -->
+  <xacro:cad_link name="tool_link"/>
+
+  <!-- Connect the shoulder to the base through joint 1. -->
+  <xacro:cad_joint child="shoulder_link"/>
+  <!-- Connect the upper arm to the shoulder through joint 2. -->
+  <xacro:cad_joint child="upper_arm_link"/>
+  <!-- Connect the elbow to the upper arm through joint 3. -->
+  <xacro:cad_joint child="elbow_link"/>
+  <!-- Connect the wrist carrier to the elbow through joint 4. -->
+  <xacro:cad_joint child="wrist_roll_link"/>
+  <!-- Connect the wrist pitch body to its carrier through joint 5. -->
+  <xacro:cad_joint child="wrist_pitch_link"/>
+  <!-- Connect the tool interface to the wrist through joint 6. -->
+  <xacro:cad_joint child="tool_link"/>
+</robot>
