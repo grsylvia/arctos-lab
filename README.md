@@ -23,10 +23,10 @@ ROS 2 Jazzy workspace for Ubuntu 24.04.
 | [Project overview](docs/PROJECT_OVERVIEW.md) | What we have built, why each step matters, and current limitations |
 | [Printing guide](docs/PRINTING_GUIDE.md) | Stock P1S with Bambu Lab PLA |
 | [Bambu Studio CLI](docs/BAMBU_CLI.md) | Local WSL slicing and export for agents and terminals |
-| [Budget summary](docs/BOM_SUMMARY.md) | MVP stages, axis costs, and robot joint mapping |
+| [Budget summary](docs/BOM_SUMMARY.md) | Joint 1 MVP, marketplace prices, and item-by-item source review |
 | [Full BOM](docs/BOM.csv) | Complete parts list and purchase links |
-| [MVP BOM](docs/MVP_BOM.csv) | Bench prototype and full-arm purchase quantities |
-| [Axis BOM](docs/AXIS_BOM.csv) | Per-axis allocations and marginal costs |
+| [MVP BOM](docs/MVP_BOM.csv) | Joint 1 base purchase quantities, pack costs, and verification status |
+| [Axis BOM](docs/AXIS_BOM.csv) | Historical full-arm allocations; superseded wrist-bench purchasing schedule |
 
 Build from a terminal with the ROS underlay sourced:
 

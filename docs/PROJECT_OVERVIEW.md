@@ -45,7 +45,7 @@ A **frame** defines where a link's coordinates begin and which way its axes poin
 | [Project guidance](../AGENTS.md) | Define source references, commenting style, scope, and CAD privacy rules. | Local CAD analysis is authorized; purchased assets and mesh exports remain excluded from Git. |
 | [Printing guide](PRINTING_GUIDE.md) | Document preparation and fit checks for the P1S and owned PLA. | Instructions prepared; physical print validation is not recorded. |
 | [BOM](BOM.csv) and [budget summary](BOM_SUMMARY.md) | Organize components, purchase links, and planning allowances. | Prices and compatibility still need verification. |
-| [MVP BOM](MVP_BOM.csv) and [axis BOM](AXIS_BOM.csv) | Plan staged purchasing and show reuse and per-axis allocations. | Planning documents; they do not establish hardware readiness. |
+| [MVP BOM](MVP_BOM.csv) and [axis BOM](AXIS_BOM.csv) | Plan the Joint 1 base purchase; retain historical full-arm allocations. | MVP includes listing prices and source checks; axis BOM reuse figures describe the superseded wrist-bench plan. |
 
 **What the current model does not establish**
 

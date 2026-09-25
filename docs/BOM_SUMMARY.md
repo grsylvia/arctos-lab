@@ -1,116 +1,72 @@
-# Arctos MVP budget
+# Joint 1 MVP budget
 
-**Start with one unloaded axis: about $140.** Expand to the full open-loop arm: about **$760 total**, with PLA already owned.
+**Build the X / `joint_1` base and rotate its printed output. Budget about $175 before shipping and tax.** PLA is already owned; downstream joints and payload are deferred.
 
-All USD prices are **unverified planning allowances**, not current vendor quotes. The [official BOM](https://arctosrobotics.com/bom/) has quantities and links but no prices.
+| Milestone | Result |
+| --- | --- |
+| Electrical checkout | Secured Joint 1 NEMA 23 turns slowly in both directions |
+| **MVP complete** | Assembled base drives its output through the 630 mm belt, with bearings and tensioner installed |
+| Later | Homing, remaining arm, gripper, ROS hardware interface and full-arm loading |
 
-| Stage | Estimated spend | What it demonstrates |
-| --- | ---: | --- |
-| 1 — One-axis bench prototype | **$133.32** | One fixed motor turns a printed indicator; verifies basic printing, wiring, and control |
-| 2 — Complete open-loop arm | **$623.78 additional** | Six moving axes plus gripper, using stage 1 purchases |
-| Both stages combined | **$757.10** | Full BOM open-loop allowance ($732.10) + $25 setup supplies |
-| PLA | **$0.00** | Already owned; full BOM specifies 5 kg |
+Use USB → Nano-compatible board → external STEP/DIR driver → NEMA 23. A loose motor spinning is only an intermediate check. Single-axis firmware still needs implementation; the repository currently provides a robot description, not this hardware control.
 
-**Marginal cost by actual robot axis**
+**Shopping list — USD, checked 2026-09-25**
 
-The bench motor belongs to **A / `joint_4`**, not the base. Structural mapping below comes from [geometry.yaml](../src/arctos_description/config/geometry.yaml) and [arctos.urdf](../src/arctos_description/urdf/arctos.urdf).
+Amazon amounts are observed whole-pack asking prices, **not a verified market-wide cheapest cart**. AliExpress returned page challenges, so matching variant prices could not be confirmed. Blank CSV prices mean unknown, not free.
 
-| Arctos axis | ROS joint | Parent → child link | Rotation axis in CAD pose |
-| --- | --- | --- | --- |
-| X | `joint_1` | `base_link` → `shoulder_link` | +Z |
-| Y | `joint_2` | `shoulder_link` → `upper_arm_link` | +Y |
-| Z | `joint_3` | `upper_arm_link` → `elbow_link` | +Y |
-| A | `joint_4` | `elbow_link` → `wrist_roll_link` | +X |
-| B | `joint_5` | `wrist_roll_link` → `wrist_pitch_link` | +Y |
-| C | `joint_6` | `wrist_pitch_link` → `tool_link` | +X |
+| Buy for Joint 1 | Required / purchased | Amazon pack cost | AliExpress | Budget |
+| --- | --- | ---: | --- | ---: |
+| NEMA 23, 2.8 A, 6.35 mm shaft, 76 mm body | 1 / 1 | [$29.99](https://www.amazon.com/dp/B00PNEPI0A) | [Check price](https://www.aliexpress.com/item/4001179117186.html) | $29.99 |
+| External TB6600-style driver | 1 / 1 | [$9.98](https://www.amazon.com/dp/B0FFGGJTYX) | [$8.53 tracker lead*](https://www.pricearchive.org/aliexpress.com/item/1005006860889354) | $9.98 |
+| Nano-compatible board with USB cable | 1 / 3 boards | [$15.99](https://www.amazon.com/dp/B07G99NNXL) | [Check price](https://www.aliexpress.com/item/1005006003220843.html) | $15.99 |
+| Enclosed 24 V, 5 A supply with AC cord | 1 / 1 | [$23.99](https://www.amazon.com/dp/B0DJ92N275) | [Search exact rating](https://www.aliexpress.com/w/wholesale-24v-5a-power-adapter.html) | $23.99 |
+| 6806 / 61806, 30×42×7 mm bearings | 2 | Unavailable | [Check price](https://www.aliexpress.com/item/1005004655110314.html) | $10 allowance |
+| 625, 5×16×5 mm bearings | 12 / 12 | [$8.99](https://www.amazon.com/dp/B0BRQP2QG7) | [Check price](https://www.aliexpress.com/item/4001139691289.html) | $8.99 |
+| GT2 closed belt, 630×10 mm, 2 mm pitch | 1 | Unavailable | [Select 630 mm / 10 mm](https://www.aliexpress.com/item/1005003425274376.html) | $6 allowance |
+| 20T GT2 pulley, 6.35 mm bore, 10 mm belt | 1 / 5 | [$7.99](https://www.amazon.com/dp/B07BT6MVXB) | [Select exact variant](https://www.aliexpress.com/item/1005001793654408.html) | $7.99 |
+| Smooth idlers, 5 mm bore, 10 mm belt | 2 / 5 | [$9.99†](https://www.amazon.com/dp/B07BPHRSN5) | [Select exact variant](https://www.aliexpress.com/item/32817328238.html) | $9.99 |
+| Base screws and nuts | See takeoff below | Pack not selected | Links in CSV | $20 allowance |
+| Rigid base board and four M8 attachments | 1 set | Pack not selected | Links in CSV | $10 allowance |
+| Motor/power wire, connector, terminals, fuse, DC disconnect, insulation | 1 basket | Pack not selected | Links in CSV | $15 allowance |
+| Signal jumpers | 1 / 120-wire pack | [$6.98](https://www.amazon.com/dp/B01EV70C78) | Link in CSV | $6.98 |
+| Printed base/transmission parts | 1 set | Owned PLA | — | $0 |
+| **Observed-price subset** | Includes idler caveat† | **$113.90** | No verified AliExpress subtotal | |
+| **Unpriced allowances** | Bearings, belt, hardware, fixture, wiring | | | **$61.00** |
+| **Provisional MVP total** | | | | **$174.90** |
 
-The [description package](../src/arctos_description/README.md) is a structural visual model: it omits motors, fasteners, covers, and the gripper. It cannot establish a complete per-axis shopping list. **Buy the unassigned hardware basket once in this schedule; the small axis increments below are not standalone assembled-joint prices.**
+*Search-indexed PriceArchive figure, not a live AliExpress quote; variant, availability and US delivery cost remain unverified. [Direct listing](https://www.aliexpress.com/item/1005006860889354.html). Excluded from totals. No welcome coupons, subscriptions, or fractional pack costs are used in the budget.
 
-| Purchase after the $133.32 bench prototype | Marginal USD | Running total USD |
-| --- | ---: | ---: |
-| Shared / unassigned hardware, purchased once | $417.08 | $550.40 |
-| X / `joint_1` | $43.00 | $593.40 |
-| Y / `joint_2` | $57.00 | $650.40 |
-| Z / `joint_3` | $39.50 | $689.90 |
-| A / `joint_4` | $2.00 | $691.90 |
-| B / `joint_5` | $22.00 | $713.90 |
-| C / `joint_6` | $22.00 | $735.90 |
-| Gripper accessory | $21.20 | $757.10 |
+† The idler title says **5 mm bore**, but one description bullet says **3 mm**. Confirm 5 mm before purchasing; $9.99 is an observed price, not a cleared purchase recommendation.
 
-| Axis | Assigned BOM items | Reuse / allocation basis |
+**Final item review**
+
+| Item / group | Source confirmation | Remaining check |
 | --- | --- | --- |
-| X | 9: belt; 15: pulley; 18: motor; 25: driver | One X motor channel |
-| Y | 10: belt; 15: pulley; 18: motor; 25: driver; 63: pins | One Y motor channel and its named gearbox pins |
-| Z | 11: belt; 14: pulley; 19: motor; 25: driver; 62: pins | One Z motor channel and its named gearbox pins |
-| A | 13: pulley; 20: motor; 25: driver | $19 assigned total; $17 motor/driver already bought, leaving $2 |
-| B | 12: belt; 13: pulley; 21: motor; 25: driver | Half of paired B/C motor and belt quantities |
-| C | 12: belt; 13: pulley; 21: motor; 25: driver | Other half of paired B/C quantities |
-| Gripper | 22: servo; 64: pins | Accessory beyond `tool_link`; not a seventh modeled axis |
+| Motor | [Official BOM](https://arctosrobotics.com/bom/) item 18 specifies 1.8 Nm, 2.8 A, 6.35 mm shaft, 76 mm body; selected listing offers 1.9 Nm with matching dimensions | Motor lead length and mounting fit |
+| Driver | Custom MVP substitution; [DFRobot documentation](https://www.dfrobot.com/product-1547.html) supports external STEP/DIR architecture | Generic module differs from DFRobot; verify its current table, signal current and cooling |
+| Controller | BOM 29 identifies Nano with cable | Open-loop STEP/DIR is a substitution; verify headers/cable and prepare firmware; Mega firmware is not a drop-in |
+| Supply | Selected listing specifies 24 V / 5 A / 120 W and AC cord | Confirm connector polarity/rating and driver requirements; power Nano over USB |
+| Central bearings | BOM 1 and local CAD: two 6806 bearings on the X shaft | Exact-size pack price |
+| Support bearings | BOM 2 and local CAD: twelve 625 bearings around the base | Printed fits and free rotation |
+| Belt | BOM 9 explicitly names X and 630×10 mm | Closed-loop variant and pack cost |
+| Motor pulley | BOM 15 matches 20T / W10 / B6.35; one pulley belongs to X | Belt alignment and shaft attachment |
+| Idlers | BOM 16; two X-tensioner locations in CAD | Seller's bore contradiction |
+| Base fasteners | BOM 40, 46, 48, 54, 56 provide sizes; local CAD supplies provisional X-only counts; assembly step 724 calls out washers | Dry-fit lengths/thread engagement and washer stack; price retail packs |
+| Base attachment | Four CAD mounting positions; CAD models M8×25, global BOM 51 says M8×40 | Length depends on fixture thickness |
+| Power wiring | Required by external-driver architecture; original cable rows do not select all necessary connectors | Select wire, connector, fuse and DC disconnect ratings together |
+| Signal jumpers | BOM 75 | Signal use only; do not carry motor power |
+| Printed parts | Purchased 2.9.7 CAD/STLs; [official assembly viewer](https://arctosrobotics.com/wp-content/uploads/2026/Assembly/viewer.html) is the assembly reference | Physical assembly fit and belt tension |
 
-Pulley assignments are inferred from shaft diameter, belt width, and channel counts. The model defines joint geometry, not motor-to-joint transmissions; the B/C split is bookkeeping, not proof that either wrist joint can operate independently. Plan their mechanical integration together.
+Base fastener takeoff: **11× M3×20 + 11× M3 nuts; 10× M5×20; 12× M5×30; 10× M5 nuts; 2× M5 washers**, plus four fixture-dependent M8 attachments. Counts are CAD-derived for the base and output only; sensor holders and electronics panels are excluded.
 
-The **$417.08** basket retains bearings, fasteners, idlers, rods, sensors, remaining shared electronics, cables, and consumables whose axis allocation is unverified. This avoids guessing bearing or screw counts from structural meshes. A's $2 increment therefore does **not** mean an assembled A joint costs $2.
+Final assembly-doc pass: steps **721–726** cover tensioner/idlers/belt; **753 and 801** identify the two central bearings; **806–808** cover support bolts/bearings; **814** identifies table fasteners. Step **724** labels a washer “M3,” but the corresponding CAD part measures **5.3 mm ID / 10 mm OD**: use M5 dimensions. CAD also contains coincident printed WasherXIdler spacers; confirm the intended stack by dry fit rather than blindly stacking both representations. This remains an unresolved assembly detail.
 
-**$133.32 bench + $417.08 shared + $185.50 axis additions + $21.20 gripper = $757.10.** [AXIS_BOM.csv](AXIS_BOM.csv) records every quantity split, reused purchase, model joint/link, and source purchase link. No price allowances were changed.
+Print X lower core, X upper Core, X motor CORE, X pulley shaft, X pulley, X pulley nut, X idler tensioner, and both WasherXIdler spacers. Purchased assets and derived meshes remain local under `cad/`.
 
-The URDF currently locks joint limits at zero and has no verified inertial or collision model. This schedule tracks purchasing, not readiness to enable robot motion.
+**Review corrections:** rejected the old supply link because it identifies a Resvent adapter; rejected the cheaper $25.99 motor because it has an 8 mm shaft and 82 mm body. Removed the wrist NEMA 17, CNC shield, TMC2209, full-arm 20 A supply, cosmetic panels and full-arm hardware basket from the first purchase.
 
-**Stage 1: buy only these quantities**
+Start with supervised slow jogs of the unloaded base and an accessible DC power cut. Homing sensors/magnets, automatic homing, unattended operation and payload tests are deferred. Establish travel from physical clearance before motion; project limits use the nearest collision angle divided by 1.5. The model does not validate hardware travel or implement control.
 
-| Parts | BOM item(s) | Quantity | USD |
-| --- | --- | --- | ---: |
-| A-axis NEMA 17, 1.3 A | 20 | 1 | $12.00 |
-| Arduino Mega + CNC shield V3 | 23, 24 | 1 each | $25.00 |
-| TMC2209 driver | 25 | 1 | $5.00 |
-| Power supply | 31 | 1 | $30.00 |
-| Panel connector + switch | 32, 33 | 1 each | $5.00 |
-| Cooling fan | 35 | 1 | $4.00 |
-| M3×10 mounting screws | 38 | 4; confirm fit | $0.32 |
-| Motor cable, power cord, jumper set, USB cable | 73–76 | 1 each | $19.00 |
-| Zip ties + heat shrink | 67, 68 | 1 pack each | $8.00 |
-| Wiring, terminals, circuit protection | Added allowance | 1 allowance | $15.00 |
-| Rigid bench fixture and attachment hardware | Added allowance | 1 allowance | $10.00 |
-| **Stage 1 total** | | | **$133.32** |
+[MVP_BOM.csv](MVP_BOM.csv) is the current Joint 1 plan, including per-item evidence and price status. [BOM.csv](BOM.csv) remains the full-arm source inventory. [AXIS_BOM.csv](AXIS_BOM.csv) describes the **superseded wrist-bench schedule**; its reuse columns and totals do not apply here. The previous $757.10 full-arm estimate is not an updated expansion quote.
 
-Use the A-axis motor because its BOM rating is 1.3 A. Set the driver's current for that motor and the actual carrier's cooling limits. Verify shield pin mapping and driver orientation before power-up. Use a suitably rated, enclosed supply; do not leave mains terminals exposed.
-
-Print a small indicator and rigid fixture from owned PLA; these are prototype fixtures to prepare. **Stage 1 is an unloaded bench demonstration, not an assembled Arctos joint or lifting test.** Base bearings, gearboxes, endstops, and the remaining axes wait until stage 2. Exact X-base hardware quantities were not verified.
-
-| Stage 1 pass check | Required result |
-| --- | --- |
-| Motion | Repeatable slow forward/reverse commands with the motor secured |
-| Printed fit | Indicator and fixture fit without slipping or cracking |
-| Wiring and control | Accessible power cut; no loose terminals or driver thermal shutdown |
-| Expansion | Keep every purchased component for the final arm |
-
-**Full-arm cost breakdown — includes stage 1 parts**
-
-| Category | USD |
-| --- | ---: |
-| Bearings | $231.50 |
-| Six steppers + gripper servo | $134.00 |
-| Screws + nuts | $77.90 |
-| Open-loop control boards + drivers | $60.00 |
-| Power + general electronics | $59.00 |
-| Belts + pulleys + idlers | $51.50 |
-| Rods + dowel pins | $50.70 |
-| Cables | $36.50 |
-| Magnets + consumables | $31.00 |
-| Added setup supplies | $25.00 |
-| Owned PLA | $0.00 |
-| **Total** | **$757.10** |
-
-Bearings are the largest allowance: the 22 × 61803 bearings alone account for $66, and 5 × 61812 account for $60. Compare matching sizes and pack prices before buying.
-
-| Defer or reuse | Budget effect |
-| --- | --- |
-| Closed-loop electronics, items 26–30 | Not purchased for either MVP stage |
-| Remaining motors, bearings, transmissions, gripper | Deferred during stage 1; retained in the full-arm total |
-| PLA and purchased CAD | No new purchase cost |
-| Cosmetic panels | Print later; no assumed hardware savings |
-
-[MVP_BOM.csv](MVP_BOM.csv) provides both stage quantities, USD totals, remaining spend, and purchase/search links. [BOM.csv](BOM.csv) preserves the complete 76-item source list, including the closed-loop alternative. Full closed-loop source allowance with owned PLA is $900.10, before the added setup allowance.
-
-Tools and a computer are assumed owned. Shipping, tax, duties, retail pack rounding, electricity, and replacements are excluded. The $25 setup reserve is provisional. Prices and component compatibility still require checking; this is a staged budget, not a verified checkout cart.
-
-Sources: [Arctos BOM](https://arctosrobotics.com/bom/) for parts and quantities; [Arctos docs](https://arctosrobotics.com/docs/) for open-loop architecture and assembly context. Checked 2026-09-25.
+Assumed owned: computer, tools and PLA. Shipping, tax, duties, print electricity and replacements are excluded. The $174.90 total remains provisional until unpriced packs and flagged variants are resolved.
