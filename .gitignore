@@ -2,6 +2,9 @@
 /cad/
 /arctos_cad/
 
+# Keep project documentation local.
+/docs/
+
 # Generated ROS workspace files
 /build/
 /install/
