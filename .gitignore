@@ -1,0 +1,12 @@
+# Private purchased CAD — never commit or publish
+/cad/
+/arctos_cad/
+
+# Generated ROS workspace files
+/build/
+/install/
+/log/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
