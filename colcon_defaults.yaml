@@ -1,0 +1,14 @@
+# Configure workspace builds.
+build:
+  # Discover source packages only inside src.
+  base-paths: [src]
+  # Link installed files to their sources where supported.
+  symlink-install: true
+# Configure package listing.
+list:
+  # List packages from the workspace source directory.
+  base-paths: [src]
+# Configure package testing.
+test:
+  # Discover testable packages inside src.
+  base-paths: [src]

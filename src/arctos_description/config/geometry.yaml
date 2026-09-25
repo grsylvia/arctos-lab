@@ -1,0 +1,128 @@
+# Define the stationary base using local STL and STEP measurements.
+base_link:
+  # Place the base frame at its bottom plane in assembly millimetres.
+  origin: [-0.529, 0.0, 56.94]
+  # List the private STL parts to combine in this link frame.
+  meshes:
+    # Use the lower base housing mesh.
+    - file: X lower core_1-X lower core-stl.stl
+    # Use the upper base housing mesh.
+    - file: X upper Core_1-X upper core (1) (2)-stl.stl
+
+# Group the structural parts that rotate about the base shaft.
+shoulder_link:
+  # Attach this link to base_link.
+  parent: base_link
+  # Give this connection its stable ROS joint name.
+  joint: joint_1
+  # Place the frame on the base shaft near its top in millimetres.
+  origin: [-0.529, 0.0, 186.846]
+  # Rotate about positive Z by the right-hand rule in the CAD pose.
+  axis: [0, 0, 1]
+  # List the private STL parts to combine in this link frame.
+  meshes:
+    # Include the shaft that carries the rotating shoulder.
+    - file: X pulley  shaft_1-X pulley shaft-stl.stl
+    # Use the left shoulder housing mesh.
+    - file: Y L Core (1)_1-YL core-stl.stl
+    # Use the right shoulder housing mesh.
+    - file: Y R Core_1-YR core-stl.stl
+
+# Group the arm structure between the shoulder and elbow axes.
+upper_arm_link:
+  # Attach this link to shoulder_link.
+  parent: shoulder_link
+  # Give this connection its stable ROS joint name.
+  joint: joint_2
+  # Locate the shoulder bearing axis in assembly millimetres.
+  origin: [20.356, 0.0, 344.568]
+  # Rotate about positive Y by the right-hand rule in the CAD pose.
+  axis: [0, 1, 0]
+  # List the private STL parts to combine in this link frame.
+  meshes:
+    # Use the left lower arm structure.
+    - file: Z L lower Core_1-ZL lower core-stl.stl
+    # Use the right lower arm structure.
+    - file: Z R lower core (1)_1-Z R lower core-stl.stl
+    # Use the left middle arm structure.
+    - file: Z L middle core_1-ZL middle core-stl.stl
+    # Use the right middle arm structure.
+    - file: Z R middle core (1)_1-ZR middle core-stl.stl
+    # Use the left upper arm structure.
+    - file: Z L upper Core_1-ZL upper core-stl.stl
+    # Use the right upper arm structure.
+    - file: Z R upper Core_1-ZR upper core-stl.stl
+
+# Group the elbow structure and wrist roll housing.
+elbow_link:
+  # Attach this link to upper_arm_link.
+  parent: upper_arm_link
+  # Give this connection its stable ROS joint name.
+  joint: joint_3
+  # Locate the elbow shaft axis in assembly millimetres.
+  origin: [19.046, 0.065, 605.575]
+  # Rotate about positive Y by the right-hand rule in the CAD pose.
+  axis: [0, 1, 0]
+  # List the private STL parts to combine in this link frame.
+  meshes:
+    # Use the left elbow support.
+    - file: ZL core 1_1-ZL core 1-stl.stl
+    # Use the right elbow support.
+    - file: ZR core_1-ZR core (1)-stl.stl
+    # Include the inner wrist roll housing.
+    - file: A core inner_1-A core inner-stl.stl
+    # Include the outer wrist roll housing.
+    - file: A core outer_1-A core outer (1)-stl.stl
+
+# Group the parts carried by the wrist roll axis.
+wrist_roll_link:
+  # Attach this link to elbow_link.
+  parent: elbow_link
+  # Give this connection its stable ROS joint name.
+  joint: joint_4
+  # Locate the A-core roll axis near its face in millimetres.
+  origin: [154.805, 0.065, 627.28]
+  # Rotate about positive X by the right-hand rule in the CAD pose.
+  axis: [1, 0, 0]
+  # List the private STL parts to combine in this link frame.
+  meshes:
+    # Use the rotating A-core mesh.
+    - file: A core.stl
+    # Include the left wrist carrier.
+    - file: BL core (1)_1-BL core (1) (1)-stl.stl
+    # Include the right wrist carrier.
+    - file: BR core_1-BR core-stl.stl
+
+# Group the body and cap carried by the wrist pitch axis.
+wrist_pitch_link:
+  # Attach this link to wrist_roll_link.
+  parent: wrist_roll_link
+  # Give this connection its stable ROS joint name.
+  joint: joint_5
+  # Locate the carrier bearing axis in assembly millimetres.
+  origin: [283.229, 0.309, 625.506]
+  # Rotate about positive Y by the right-hand rule in the CAD pose.
+  axis: [0, 1, 0]
+  # List the private STL parts to combine in this link frame.
+  meshes:
+    # Use the wrist pitch body with the bore alignment below.
+    - file: B-core.stl
+      # Shift the bore from X=280.229 to X=283.229 mm to match its carrier.
+      translation: [3.0, 0.0, 0.0]
+    # Include the wrist pitch body cap.
+    - file: B core cap (1)_1-B core cap (1)-stl.stl
+
+# Define the final rotating tool interface.
+tool_link:
+  # Attach this link to wrist_pitch_link.
+  parent: wrist_pitch_link
+  # Give this connection its stable ROS joint name.
+  joint: joint_6
+  # Locate the C-core axis near its inner face in millimetres.
+  origin: [319.064, 0.309, 625.506]
+  # Rotate about positive X by the right-hand rule in the CAD pose.
+  axis: [1, 0, 0]
+  # List the private STL parts to combine in this link frame.
+  meshes:
+    # Use the final C-core tool interface mesh.
+    - file: C core (1)_1-C core (1)-stl.stl
