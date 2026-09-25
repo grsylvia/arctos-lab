@@ -52,7 +52,7 @@ A **frame** defines where a link's coordinates begin and which way its axes poin
 | Area | Remaining work |
 | --- | --- |
 | Assembly fit | Review link grouping and the wrist body's +3 mm alignment correction against the assembly. |
-| Joint motion | Confirm travel, speed, and effort limits; all six modeled joints currently have zero limits. |
+| Joint motion | Measure travel on hardware; current limits are provisional, and speed and effort are 0. |
 | Calibration | Establish hardware home positions and motor directions; the current zero pose is the CAD assembly pose. |
 | Model completeness | Motors, fasteners, covers, and the gripper are not represented. |
 | Simulation and control | Collision shapes, inertial properties, transmissions, hardware drivers, and motion planning are not implemented. |

@@ -8,7 +8,7 @@ Mesh assets and generated exports stay local under Git-ignored `cad/`.
 | Geometry | Seven links using actual structural STLs; motors, fasteners, covers, and gripper omitted |
 | Joint axes | Six axes located from bearing/shaft geometry; positive directions follow the right-hand rule |
 | Zero pose | Supplied CAD assembly pose; hardware home and motor signs uncalibrated |
-| Joint limits | Locked at zero; travel, effort, and velocity remain unverified |
+| Joint limits | Provisional travel from CAD self-collision less 10°, else ±90°; effort and velocity are 0 (unverified) |
 | Physics | Visual model only; no collision or inertial model |
 | Wrist fit | `B-core.stl` shifted +3 mm in X to align its bore with the carrier bores; assembly fit needs review |
 
