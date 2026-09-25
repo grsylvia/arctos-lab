@@ -17,6 +17,16 @@
   <exec_depend>xacro</exec_depend>
   <!-- Read geometry settings in the mesh preparation script. -->
   <exec_depend>python3-yaml</exec_depend>
+  <!-- Run the Python launch description. -->
+  <exec_depend>launch_ros</exec_depend>
+  <!-- Publish link transforms from the URDF. -->
+  <exec_depend>robot_state_publisher</exec_depend>
+  <!-- Publish default joint states without the GUI. -->
+  <exec_depend>joint_state_publisher</exec_depend>
+  <!-- Publish joint states from interactive sliders. -->
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <!-- Display the model and transforms. -->
+  <exec_depend>rviz2</exec_depend>
   <!-- Expose build metadata to ROS tooling. -->
   <export>
     <!-- Select the ament CMake build system. -->
