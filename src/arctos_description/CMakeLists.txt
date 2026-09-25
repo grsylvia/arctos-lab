@@ -16,6 +16,8 @@ install(DIRECTORY "${ARCTOS_MESH_DIR}/" DESTINATION share/${PROJECT_NAME}/meshes
 install(FILES README.md DESTINATION share/${PROJECT_NAME})
 # Make the mesh preparation script available through ros2 run.
 install(PROGRAMS scripts/prepare_meshes.py DESTINATION lib/${PROJECT_NAME})
+# Install the RViz launch file and display configuration.
+install(DIRECTORY launch rviz DESTINATION share/${PROJECT_NAME})
 
 # Register this package in the ROS environment.
 ament_package()

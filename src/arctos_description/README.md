@@ -49,6 +49,30 @@ All link frames initially share the STL assembly orientation: Z up, X toward the
 | 5 | Y | BL/BR carrier and bevel gear bores |
 | 6 | X | C core cylinders |
 
+## View in RViz
+
+```bash
+# Load ROS and the built workspace.
+source /opt/ros/jazzy/setup.bash && source ~/arctos_ws/install/local_setup.bash
+# Start the model, joint state publisher, and RViz.
+ros2 launch arctos_description display.launch.py
+```
+
+```mermaid
+flowchart LR
+  URDF[urdf/arctos.urdf] --> RSP[robot_state_publisher]
+  JSP[joint_state_publisher_gui] -- /joint_states --> RSP
+  RSP -- /robot_description, /tf --> RVIZ[rviz2 + rviz/display.rviz]
+```
+
+| Launch argument | Default | Use |
+| --- | --- | --- |
+| `model` | installed `urdf/arctos.urdf` | URDF file to display |
+| `rviz_config` | installed `rviz/display.rviz` | RViz layout: grid, robot model, TF |
+| `gui` | `true` | Joint sliders; `false` publishes zero joint states |
+
+Sliders appear only for joints with a non-zero limit range.
+
 Reference: [Arctos docs](https://arctosrobotics.com/docs/) and
 [BOM](https://arctosrobotics.com/bom/). Geometry comes from local CAD; the BOM does
 not establish joint limits. Verify travel and assembly fit before enabling motion.

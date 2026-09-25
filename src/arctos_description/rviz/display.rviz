@@ -1,0 +1,62 @@
+# Arrange the RViz window panels.
+Panels:
+  # Show the display list on the left.
+  - Class: rviz_common/Displays
+    Name: Displays
+# Configure the 3D scene.
+Visualization Manager:
+  # Name the root display group.
+  Class: ""
+  # List the scene displays.
+  Displays:
+    # Draw a ground reference grid.
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      # Use 5 cm cells to suit the arm's scale.
+      Cell Size: 0.05
+      # Cover a 1 m square around the base.
+      Plane Cell Count: 20
+      Reference Frame: <Fixed Frame>
+    # Draw the URDF meshes at their current joint positions.
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Enabled: true
+      # Read the URDF from robot_state_publisher's topic.
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+      Visual Enabled: true
+      Collision Enabled: false
+    # Draw each link frame and the TF tree.
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: true
+      # Size frame axes to stay visible without hiding the meshes.
+      Marker Scale: 0.3
+      Show Names: true
+      Show Axes: true
+      Show Arrows: true
+  # Set scene-wide options.
+  Global Options:
+    # Anchor the scene to the robot base.
+    Fixed Frame: base_link
+    Background Color: 48; 48; 48
+    Frame Rate: 30
+  # Use an orbit camera aimed at the arm.
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      # Start far enough back to frame the full arm.
+      Distance: 1.2
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0.25
+      Pitch: 0.4
+      Yaw: 0.8
+# Size the RViz window.
+Window Geometry:
+  Width: 1200
+  Height: 800
