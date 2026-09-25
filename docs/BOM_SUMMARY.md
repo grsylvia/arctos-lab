@@ -11,6 +11,50 @@ All USD prices are **unverified planning allowances**, not current vendor quotes
 | Both stages combined | **$757.10** | Full BOM open-loop allowance ($732.10) + $25 setup supplies |
 | PLA | **$0.00** | Already owned; full BOM specifies 5 kg |
 
+**Marginal cost by actual robot axis**
+
+The bench motor belongs to **A / `joint_4`**, not the base. Structural mapping below comes from [geometry.yaml](../src/arctos_description/config/geometry.yaml) and [arctos.urdf](../src/arctos_description/urdf/arctos.urdf).
+
+| Arctos axis | ROS joint | Parent → child link | Rotation axis in CAD pose |
+| --- | --- | --- | --- |
+| X | `joint_1` | `base_link` → `shoulder_link` | +Z |
+| Y | `joint_2` | `shoulder_link` → `upper_arm_link` | +Y |
+| Z | `joint_3` | `upper_arm_link` → `elbow_link` | +Y |
+| A | `joint_4` | `elbow_link` → `wrist_roll_link` | +X |
+| B | `joint_5` | `wrist_roll_link` → `wrist_pitch_link` | +Y |
+| C | `joint_6` | `wrist_pitch_link` → `tool_link` | +X |
+
+The [description package](../src/arctos_description/README.md) is a structural visual model: it omits motors, fasteners, covers, and the gripper. It cannot establish a complete per-axis shopping list. **Buy the unassigned hardware basket once in this schedule; the small axis increments below are not standalone assembled-joint prices.**
+
+| Purchase after the $133.32 bench prototype | Marginal USD | Running total USD |
+| --- | ---: | ---: |
+| Shared / unassigned hardware, purchased once | $417.08 | $550.40 |
+| X / `joint_1` | $43.00 | $593.40 |
+| Y / `joint_2` | $57.00 | $650.40 |
+| Z / `joint_3` | $39.50 | $689.90 |
+| A / `joint_4` | $2.00 | $691.90 |
+| B / `joint_5` | $22.00 | $713.90 |
+| C / `joint_6` | $22.00 | $735.90 |
+| Gripper accessory | $21.20 | $757.10 |
+
+| Axis | Assigned BOM items | Reuse / allocation basis |
+| --- | --- | --- |
+| X | 9: belt; 15: pulley; 18: motor; 25: driver | One X motor channel |
+| Y | 10: belt; 15: pulley; 18: motor; 25: driver; 63: pins | One Y motor channel and its named gearbox pins |
+| Z | 11: belt; 14: pulley; 19: motor; 25: driver; 62: pins | One Z motor channel and its named gearbox pins |
+| A | 13: pulley; 20: motor; 25: driver | $19 assigned total; $17 motor/driver already bought, leaving $2 |
+| B | 12: belt; 13: pulley; 21: motor; 25: driver | Half of paired B/C motor and belt quantities |
+| C | 12: belt; 13: pulley; 21: motor; 25: driver | Other half of paired B/C quantities |
+| Gripper | 22: servo; 64: pins | Accessory beyond `tool_link`; not a seventh modeled axis |
+
+Pulley assignments are inferred from shaft diameter, belt width, and channel counts. The model defines joint geometry, not motor-to-joint transmissions; the B/C split is bookkeeping, not proof that either wrist joint can operate independently. Plan their mechanical integration together.
+
+The **$417.08** basket retains bearings, fasteners, idlers, rods, sensors, remaining shared electronics, cables, and consumables whose axis allocation is unverified. This avoids guessing bearing or screw counts from structural meshes. A's $2 increment therefore does **not** mean an assembled A joint costs $2.
+
+**$133.32 bench + $417.08 shared + $185.50 axis additions + $21.20 gripper = $757.10.** [AXIS_BOM.csv](AXIS_BOM.csv) records every quantity split, reused purchase, model joint/link, and source purchase link. No price allowances were changed.
+
+The URDF currently locks joint limits at zero and has no verified inertial or collision model. This schedule tracks purchasing, not readiness to enable robot motion.
+
 **Stage 1: buy only these quantities**
 
 | Parts | BOM item(s) | Quantity | USD |

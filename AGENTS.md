@@ -7,9 +7,12 @@
 | [Arctos documentation](https://arctosrobotics.com/docs/) | Assembly, setup, and technical guidance |
 | [Arctos bill of materials (BOM)](https://arctosrobotics.com/bom/) | Components and hardware requirements |
 | Local CAD and STLs in `cad/` | Analyze geometry, dimensions, and joint placement to develop the URDF |
+| [Bambu Studio CLI](docs/BAMBU_CLI.md) | Use `bambu-studio` in WSL for local import, slicing, and export; keep outputs under `cad/` |
+| [Arctos print settings](docs/PRINTING_GUIDE.md) | Published print baseline, bundled-profile differences, and P1S starting settings |
 
 # Project guidance
 
+- All Windows exports must go to the user's OneDrive Documents folder.
 - Markdown documentation must be concise, simple, and light on text. Prefer tables and visualizations over paragraphs when presenting data.
 - The agent is responsible for writing and modifying the Arctos project code.
 - Comment generated code and configuration for readability: place one short comment immediately above each statement or setting, using at most one sentence that fits on one line.
