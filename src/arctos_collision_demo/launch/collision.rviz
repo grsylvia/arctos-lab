@@ -1,0 +1,54 @@
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+Visualization Manager:
+  Class: ''
+  Displays:
+  - Class: rviz_default_plugins/Grid
+    Name: Grid
+    Enabled: true
+    Cell Size: 0.05
+    Plane Cell Count: 20
+    Reference Frame: <Fixed Frame>
+  - Class: rviz_default_plugins/RobotModel
+    Name: RobotModel
+    Enabled: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_description
+    Visual Enabled: false
+    Collision Enabled: true
+  - Class: rviz_default_plugins/TF
+    Name: TF
+    Enabled: false
+    Marker Scale: 0.3
+    Show Names: true
+    Show Axes: true
+    Show Arrows: true
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Collision verification
+    Enabled: true
+    Topic:
+      Value: /collision_markers
+      Reliability Policy: Reliable
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Depth: 1
+  Global Options:
+    Fixed Frame: base_link
+    Background Color: 48; 48; 48
+    Frame Rate: 30
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Distance: 1.2
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0.25
+      Pitch: 0.4
+      Yaw: 0.8
+Window Geometry:
+  Width: 1200
+  Height: 800

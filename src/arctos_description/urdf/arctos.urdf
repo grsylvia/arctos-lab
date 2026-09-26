@@ -1,108 +1,106 @@
 <?xml version="1.0"?>
-<!-- Define the Arctos robot using explicit links and joints. -->
 <robot name="arctos">
-  <!-- Define the shared structural material. -->
   <material name="structure">
-    <!-- Give structural meshes an opaque blue-gray appearance. -->
     <color rgba="0.25 0.35 0.45 1"/>
   </material>
 
-  <!-- Define the rigid base_link frame. -->
+  <!-- Visuals retain detailed CAD meshes; collision meshes are simplified locally, with mm-to-metre scale. -->
   <link name="base_link">
-    <!-- Display the structural mesh in this link frame. -->
     <visual>
-      <!-- Select the prepared STL as the visible shape. -->
       <geometry>
-        <!-- Reference the installed private mesh and convert millimetres to metres. -->
         <mesh filename="package://arctos_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <!-- Apply the shared structural material. -->
       <material name="structure"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://arctos_description/meshes/collision/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- Define the rigid shoulder_link frame. -->
   <link name="shoulder_link">
-    <!-- Display the structural mesh in this link frame. -->
     <visual>
-      <!-- Select the prepared STL as the visible shape. -->
       <geometry>
-        <!-- Reference the installed private mesh and convert millimetres to metres. -->
         <mesh filename="package://arctos_description/meshes/shoulder_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <!-- Apply the shared structural material. -->
       <material name="structure"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://arctos_description/meshes/collision/shoulder_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- Define the rigid upper_arm_link frame. -->
   <link name="upper_arm_link">
-    <!-- Display the structural mesh in this link frame. -->
     <visual>
-      <!-- Select the prepared STL as the visible shape. -->
       <geometry>
-        <!-- Reference the installed private mesh and convert millimetres to metres. -->
         <mesh filename="package://arctos_description/meshes/upper_arm_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <!-- Apply the shared structural material. -->
       <material name="structure"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://arctos_description/meshes/collision/upper_arm_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- Define the rigid elbow_link frame. -->
   <link name="elbow_link">
-    <!-- Display the structural mesh in this link frame. -->
     <visual>
-      <!-- Select the prepared STL as the visible shape. -->
       <geometry>
-        <!-- Reference the installed private mesh and convert millimetres to metres. -->
         <mesh filename="package://arctos_description/meshes/elbow_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <!-- Apply the shared structural material. -->
       <material name="structure"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://arctos_description/meshes/collision/elbow_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- Define the rigid wrist_roll_link frame. -->
   <link name="wrist_roll_link">
-    <!-- Display the structural mesh in this link frame. -->
     <visual>
-      <!-- Select the prepared STL as the visible shape. -->
       <geometry>
-        <!-- Reference the installed private mesh and convert millimetres to metres. -->
         <mesh filename="package://arctos_description/meshes/wrist_roll_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <!-- Apply the shared structural material. -->
       <material name="structure"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://arctos_description/meshes/collision/wrist_roll_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- Define the rigid wrist_pitch_link frame. -->
   <link name="wrist_pitch_link">
-    <!-- Display the structural mesh in this link frame. -->
     <visual>
-      <!-- Select the prepared STL as the visible shape. -->
       <geometry>
-        <!-- Reference the installed private mesh and convert millimetres to metres. -->
         <mesh filename="package://arctos_description/meshes/wrist_pitch_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <!-- Apply the shared structural material. -->
       <material name="structure"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://arctos_description/meshes/collision/wrist_pitch_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- Define the rigid tool_link frame. -->
   <link name="tool_link">
-    <!-- Display the structural mesh in this link frame. -->
     <visual>
-      <!-- Select the prepared STL as the visible shape. -->
       <geometry>
-        <!-- Reference the installed private mesh and convert millimetres to metres. -->
         <mesh filename="package://arctos_description/meshes/tool_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <!-- Apply the shared structural material. -->
       <material name="structure"/>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://arctos_description/meshes/collision/tool_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
   </link>
 
   <!-- Define the tool-mounting face frame, X out of the face (ROS-Industrial flange). -->
@@ -111,105 +109,68 @@
   <!-- Define the tool frame, Z out of the face (ROS-Industrial tool0). -->
   <link name="tool0"/>
 
-  <!-- Connect shoulder_link to its parent through joint_1. -->
+  <!-- Joint offsets are in metres; rotations and limits are in radians. -->
+  <!-- Limits come from joint_limits.py; zero effort and velocity are unverified placeholders. -->
+  <!-- Joints 1, 4, 5, and 6 default to ±180° when the sweep finds no collision within 360°. -->
   <joint name="joint_1" type="revolute">
-    <!-- Identify the upstream rigid link. -->
     <parent link="base_link"/>
-    <!-- Identify the rigid link carried by this joint. -->
     <child link="shoulder_link"/>
-    <!-- Set the measured parent-relative offset in metres and orientation in radians. -->
     <origin xyz="0 0 0.129906" rpy="0 0 0"/>
-    <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 0 1"/>
-    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
     <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
   </joint>
 
-  <!-- Connect upper_arm_link to its parent through joint_2. -->
   <joint name="joint_2" type="revolute">
-    <!-- Identify the upstream rigid link. -->
     <parent link="shoulder_link"/>
-    <!-- Identify the rigid link carried by this joint. -->
     <child link="upper_arm_link"/>
-    <!-- Set the measured parent-relative offset in metres and orientation in radians. -->
     <origin xyz="0.020885 0 0.157722" rpy="0 0 0"/>
-    <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 1 0"/>
-    <!-- joint_limits.py: collisions at −80.2° (shoulder), +75.9° (tool on base) ÷ 1.5; effort, speed unverified. -->
+    <!-- joint_limits.py: collisions at −80.2° (shoulder), +75.9° (tool on base) ÷ 1.5. -->
     <limit lower="-0.933024" upper="0.883573" effort="0" velocity="0"/>
   </joint>
 
-  <!-- Connect elbow_link to its parent through joint_3. -->
   <joint name="joint_3" type="revolute">
-    <!-- Identify the upstream rigid link. -->
     <parent link="upper_arm_link"/>
-    <!-- Identify the rigid link carried by this joint. -->
     <child link="elbow_link"/>
-    <!-- Set the measured parent-relative offset in metres and orientation in radians. -->
     <origin xyz="-0.00131 0.000065 0.261007" rpy="0 0 0"/>
-    <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 1 0"/>
-    <!-- joint_limits.py: collisions at −203.7° and +69.0° (upper arm) ÷ 1.5; effort and speed unverified. -->
+    <!-- joint_limits.py: collisions at −203.7° and +69.0° (upper arm) ÷ 1.5. -->
     <limit lower="-2.370012" upper="0.802851" effort="0" velocity="0"/>
   </joint>
 
-  <!-- Connect wrist_roll_link to its parent through joint_4. -->
   <joint name="joint_4" type="revolute">
-    <!-- Identify the upstream rigid link. -->
     <parent link="elbow_link"/>
-    <!-- Identify the rigid link carried by this joint. -->
     <child link="wrist_roll_link"/>
-    <!-- Set the measured parent-relative offset in metres and orientation in radians. -->
     <origin xyz="0.135759 0 0.021705" rpy="0 0 0"/>
-    <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="1 0 0"/>
-    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
     <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
   </joint>
 
-  <!-- Connect wrist_pitch_link to its parent through joint_5. -->
   <joint name="joint_5" type="revolute">
-    <!-- Identify the upstream rigid link. -->
     <parent link="wrist_roll_link"/>
-    <!-- Identify the rigid link carried by this joint. -->
     <child link="wrist_pitch_link"/>
-    <!-- Set the measured parent-relative offset in metres and orientation in radians. -->
     <origin xyz="0.128424 0.000244 -0.001774" rpy="0 0 0"/>
-    <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 1 0"/>
-    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
     <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
   </joint>
 
-  <!-- Connect tool_link to its parent through joint_6. -->
   <joint name="joint_6" type="revolute">
-    <!-- Identify the upstream rigid link. -->
     <parent link="wrist_pitch_link"/>
-    <!-- Identify the rigid link carried by this joint. -->
     <child link="tool_link"/>
-    <!-- Set the measured parent-relative offset in metres and orientation in radians. -->
     <origin xyz="0.035835 0 0" rpy="0 0 0"/>
-    <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="1 0 0"/>
-    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
     <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
   </joint>
 
-  <!-- Fix the flange to tool_link on its mounting face. -->
   <joint name="joint_6-flange" type="fixed">
-    <!-- Identify the rotating tool link. -->
     <parent link="tool_link"/>
-    <!-- Identify the flange frame. -->
     <child link="flange"/>
     <!-- Place the frame on the C-core outer face, 13 mm out along the joint_6 axis. -->
     <origin xyz="0.013 0 0" rpy="0 0 0"/>
   </joint>
 
-  <!-- Fix tool0 to the flange, turned so Z points out of the face. -->
   <joint name="flange-tool0" type="fixed">
-    <!-- Identify the flange frame. -->
     <parent link="flange"/>
-    <!-- Identify the tool frame. -->
     <child link="tool0"/>
     <!-- Use the ROS-Industrial rotation: Z along flange X, X along flange Z. -->
     <origin xyz="0 0 0" rpy="3.141593 -1.570796 0"/>

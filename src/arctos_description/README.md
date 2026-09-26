@@ -10,25 +10,21 @@ Mesh assets and generated exports stay local under Git-ignored `cad/`.
 | Tool frames | `flange` (X out) and `tool0` (Z out) on the C-core outer face, per ROS-Industrial |
 | Zero pose | Supplied CAD assembly pose; hardware home and motor signs uncalibrated |
 | Joint limits | Computed by `joint_limits.py` from structural CAD; effort and velocity are 0 (unverified) |
-| Physics | Visual model only; no collision or inertial model |
+| Collision | Seven reduced local meshes; detailed visuals retained; no inertial model |
 | Wrist fit | `B-core.stl` shifted +3 mm in X to align its bore with the carrier bores; assembly fit needs review |
 
-Build the package and prepare local meshes:
+Prepare local meshes, then build the package:
 
 ```bash
-# Enter the workspace containing the source package and private CAD.
 cd ~/arctos_ws
-# Load the installed ROS 2 Jazzy environment.
 source /opt/ros/jazzy/setup.bash
-# Build and install the robot description package.
-colcon build --packages-select arctos_description
-# Make the built package available to ROS commands.
-source install/local_setup.bash
-# Export link meshes locally using the measured geometry configuration.
-ros2 run arctos_description prepare_meshes.py \
+# Generate visuals first, then collision meshes; all assets stay under cad/.
+python3 src/arctos_description/scripts/prepare_meshes.py \
   --cad-root "$PWD/cad/2.9.7" \
   --geometry "$PWD/src/arctos_description/config/geometry.yaml"
-# Validate the explicit URDF and display its link hierarchy.
+python3 src/arctos_description/scripts/prepare_collision_meshes.py --cad-root cad/2.9.7
+colcon build --packages-select arctos_description
+source install/local_setup.bash
 check_urdf src/arctos_description/urdf/arctos.urdf
 ```
 
@@ -49,6 +45,37 @@ All link frames initially share the STL assembly orientation: Z up, X toward the
 | 4 | X | A inner/outer core cylinders |
 | 5 | Y | BL/BR carrier and bevel gear bores |
 | 6 | X | C core cylinders |
+
+## Collision geometry
+
+Collision meshes are generated from the detailed link STLs with VTK decimation.
+They retain the same origins and millimetre scale. `flange` and `tool0` are frames only.
+
+| Check | Result |
+| --- | --- |
+| Triangle count | About 256,000 → 98,530 (61% fewer) |
+| Surface difference | ≤ 0.46 mm measured at vertices and triangle centres, in both directions |
+| Open boundaries and connected components | Counts preserved |
+| Detailed visual meshes | Unchanged |
+| Local outputs | `cad/2.9.7/collision_meshes/`, including a JSON measurement report |
+
+After regenerating visual meshes, regenerate collision meshes before rebuilding:
+
+```bash
+python3 src/arctos_description/scripts/prepare_collision_meshes.py --cad-root cad/2.9.7
+colcon build --packages-select arctos_description
+```
+
+The generator requires `python3-vtk9` and rejects sampled deviations above 0.5 mm.
+Validation against the detailed model: all 1,101 sampled collision decisions agreed.
+A seeded home-to-`across_blocks` RRTConnect benchmark took 19.02 s with detailed
+meshes and 16.73 s with reduced meshes; all 494 sampled path states were valid in
+both models. This is one comparison, not a general timing guarantee.
+
+Decimation is an approximation, not a guaranteed enclosing shape; sampled checks
+are not a continuous collision proof. Motors, fasteners, covers, cables, and the
+gripper remain omitted. The existing joint limits still use the detailed visual
+meshes. RViz sliders do not enforce collisions.
 
 ## Joint limits
 

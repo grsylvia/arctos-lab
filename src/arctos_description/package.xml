@@ -19,6 +19,8 @@
   <exec_depend>python3-numpy</exec_depend>
   <!-- Search nearby mesh points in the joint limit script. -->
   <exec_depend>python3-scipy</exec_depend>
+  <!-- Simplify collision meshes with geometric validation. -->
+  <exec_depend>python3-vtk9</exec_depend>
   <!-- Locate the installed package share directory in the launch file. -->
   <exec_depend>ament_index_python</exec_depend>
   <!-- Provide launch arguments, conditions, and substitutions. -->

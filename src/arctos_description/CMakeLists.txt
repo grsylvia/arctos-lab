@@ -12,10 +12,12 @@ install(DIRECTORY config urdf DESTINATION share/${PROJECT_NAME})
 set(ARCTOS_MESH_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../cad/2.9.7/urdf_meshes")
 # Copy only the private link STLs into the local install space.
 install(DIRECTORY "${ARCTOS_MESH_DIR}/" DESTINATION share/${PROJECT_NAME}/meshes FILES_MATCHING PATTERN "*.stl")
+# Install the reduced private collision meshes beside the visual meshes.
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../cad/2.9.7/collision_meshes/" DESTINATION share/${PROJECT_NAME}/meshes/collision FILES_MATCHING PATTERN "*.stl")
 # Include the model preparation instructions in the installed package.
 install(FILES README.md DESTINATION share/${PROJECT_NAME})
 # Make the mesh preparation and joint limit scripts available through ros2 run.
-install(PROGRAMS scripts/prepare_meshes.py scripts/joint_limits.py DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS scripts/prepare_meshes.py scripts/prepare_collision_meshes.py scripts/joint_limits.py DESTINATION lib/${PROJECT_NAME})
 # Install the RViz launch file and display configuration.
 install(DIRECTORY launch rviz DESTINATION share/${PROJECT_NAME})
 

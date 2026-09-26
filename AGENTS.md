@@ -14,7 +14,7 @@
 
 - Markdown documentation must be concise, simple, and light on text. Prefer tables and visualizations over paragraphs when presenting data.
 - The agent is responsible for writing and modifying the Arctos project code.
-- Comment generated code and configuration for readability: place one short comment immediately above each statement or setting, using at most one sentence that fits on one line.
+- Keep code and configuration comments concise and useful: explain non-obvious intent, assumptions, units, or constraints. Document shared conventions once; avoid repeated comments and comments that merely restate a statement or setting.
 - Work step by step and only move forward on the user's command. When the user shares a goal or context, acknowledge it and wait; do not start writing code, creating files, or changing the workspace until the user says to take a specific step.
 - Code generation is user-driven. Keep generated code and code changes constrained to the user's provided instructions. Do not anticipate or preemptively address issues, add features, or expand scope beyond those instructions.
 - **Use the purchased CAD and STLs for local analysis and as source material for the URDF.** Reading, measuring, and processing them locally is authorized; the restriction concerns publishing the assets, not using them for development. Geometry measurements may inform URDF code.
