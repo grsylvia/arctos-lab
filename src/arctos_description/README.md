@@ -106,9 +106,7 @@ Only structural parts are checked. Motors, cables, and the gripper are not model
 ## View in RViz
 
 ```bash
-# Load ROS and the built workspace.
 source /opt/ros/jazzy/setup.bash && source ~/arctos_ws/install/local_setup.bash
-# Start the model, joint state publisher, and RViz.
 ros2 launch arctos_description display.launch.py
 ```
 

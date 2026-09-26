@@ -10,6 +10,7 @@ ROS 2 Jazzy workspace for Ubuntu 24.04.
 | --- | --- |
 | [arctos_description](src/arctos_description/README.md) | Initial URDF using local CAD/STL geometry |
 | [arctos_moveit_config](src/arctos_moveit_config/README.md) | MoveIt planning around blocks with mock execution |
+| [arctos_collision_demo](src/arctos_collision_demo/README.md) | Interactive structural collision check against fixed blocks |
 
 | Path | Purpose |
 | --- | --- |
@@ -28,31 +29,23 @@ ROS 2 Jazzy workspace for Ubuntu 24.04.
 Build from a terminal with the ROS underlay sourced:
 
 ```bash
-# Load the installed ROS 2 Jazzy environment.
 source /opt/ros/jazzy/setup.bash
-# Enter the Arctos workspace before building.
 cd ~/arctos_ws
-# Build the source packages using the workspace defaults.
 colcon build
 ```
 
 Use the workspace in a new terminal:
 
 ```bash
-# Load the ROS installation that the workspace extends.
 source /opt/ros/jazzy/setup.bash
-# Add the built Arctos packages to this terminal's environment.
 source ~/arctos_ws/install/local_setup.bash
 ```
 
 After adding packages under `src/`, install their dependencies before rebuilding:
 
 ```bash
-# Resolve dependencies from the workspace root.
 cd ~/arctos_ws
-# Install declared dependencies that are not provided by source packages.
 rosdep install --from-paths src --ignore-src --rosdistro jazzy -y
-# Rebuild after installing the new package dependencies.
 colcon build
 ```
 

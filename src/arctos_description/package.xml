@@ -1,43 +1,25 @@
 <?xml version="1.0"?>
-<!-- Use ROS package manifest format 3. -->
 <package format="3">
-  <!-- Identify the package for ROS commands and dependency lookup. -->
   <name>arctos_description</name>
-  <!-- Mark the initial local description release. -->
   <version>0.1.0</version>
-  <!-- Describe the package's purpose and geometry source. -->
   <description>Initial Arctos description using locally purchased CAD meshes.</description>
-  <!-- Keep a placeholder maintainer contact during local development. -->
   <maintainer email="gsylvia@example.com">gsylvia</maintainer>
-  <!-- Declare the current private development license. -->
   <license>Proprietary</license>
-  <!-- Build and install the package with ament CMake. -->
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <!-- Read geometry settings in the mesh preparation script. -->
+  <!-- Offline mesh and joint limit scripts. -->
   <exec_depend>python3-yaml</exec_depend>
-  <!-- Sample meshes and compute transforms in the joint limit script. -->
   <exec_depend>python3-numpy</exec_depend>
-  <!-- Search nearby mesh points in the joint limit script. -->
   <exec_depend>python3-scipy</exec_depend>
-  <!-- Simplify collision meshes with geometric validation. -->
   <exec_depend>python3-vtk9</exec_depend>
-  <!-- Locate the installed package share directory in the launch file. -->
+  <!-- display.launch.py -->
   <exec_depend>ament_index_python</exec_depend>
-  <!-- Provide launch arguments, conditions, and substitutions. -->
   <exec_depend>launch</exec_depend>
-  <!-- Run the Python launch description. -->
   <exec_depend>launch_ros</exec_depend>
-  <!-- Publish link transforms from the URDF. -->
   <exec_depend>robot_state_publisher</exec_depend>
-  <!-- Publish default joint states without the GUI. -->
   <exec_depend>joint_state_publisher</exec_depend>
-  <!-- Publish joint states from interactive sliders. -->
   <exec_depend>joint_state_publisher_gui</exec_depend>
-  <!-- Display the model and transforms. -->
   <exec_depend>rviz2</exec_depend>
-  <!-- Expose build metadata to ROS tooling. -->
   <export>
-    <!-- Select the ament CMake build system. -->
     <build_type>ament_cmake</build_type>
   </export>
 </package>
