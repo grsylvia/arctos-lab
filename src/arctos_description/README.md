@@ -7,8 +7,9 @@ Mesh assets and generated exports stay local under Git-ignored `cad/`.
 | --- | --- |
 | Geometry | Seven links using actual structural STLs; motors, fasteners, covers, and gripper omitted |
 | Joint axes | Six axes located from bearing/shaft geometry; positive directions follow the right-hand rule |
+| Tool frames | `flange` (X out) and `tool0` (Z out) on the C-core outer face, per ROS-Industrial |
 | Zero pose | Supplied CAD assembly pose; hardware home and motor signs uncalibrated |
-| Joint limits | Provisional travel from CAD self-collision less 10°, else ±90°; effort and velocity are 0 (unverified) |
+| Joint limits | Computed by `joint_limits.py` from structural CAD; effort and velocity are 0 (unverified) |
 | Physics | Visual model only; no collision or inertial model |
 | Wrist fit | `B-core.stl` shifted +3 mm in X to align its bore with the carrier bores; assembly fit needs review |
 
@@ -48,6 +49,32 @@ All link frames initially share the STL assembly orientation: Z up, X toward the
 | 4 | X | A inner/outer core cylinders |
 | 5 | Y | BL/BR carrier and bevel gear bores |
 | 6 | X | C core cylinders |
+
+## Joint limits
+
+The limit rule lives in `scripts/joint_limits.py`:
+
+| Rule | Value |
+| --- | --- |
+| Limit | Nearest collision angle ÷ 1.5 (`FACTOR_OF_SAFETY`) |
+| Collisions | Self-collision, or contact with the table (`base_link` bottom plane) |
+| Downstream joints | Worst case over their limits, sampled ≤ 45° apart |
+| No collision within 360° | ±180° |
+
+```bash
+# Sweep each joint over the local link meshes and print its limits (about 20 min).
+ros2 run arctos_description joint_limits.py \
+  --urdf src/arctos_description/urdf/arctos.urdf --mesh-dir cad/2.9.7/urdf_meshes
+```
+
+| Joint | Collision angle (cause) | Limit |
+| --- | --- | --- |
+| 1 | none | ±180° |
+| 2 | −80.2° upper arm × shoulder; +75.9° tool × base | −53.5° / +50.6° |
+| 3 | −203.7° elbow × upper arm; +69.0° wrist roll × upper arm | −135.8° / +46.0° |
+| 4, 5, 6 | none | ±180° |
+
+Only structural parts are checked. Motors, cables, and the gripper are not modelled and may stop a joint sooner.
 
 ## View in RViz
 
