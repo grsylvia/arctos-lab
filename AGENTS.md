@@ -12,7 +12,6 @@
 
 # Project guidance
 
-- All Windows exports must go to the user's OneDrive Documents folder.
 - Markdown documentation must be concise, simple, and light on text. Prefer tables and visualizations over paragraphs when presenting data.
 - The agent is responsible for writing and modifying the Arctos project code.
 - Comment generated code and configuration for readability: place one short comment immediately above each statement or setting, using at most one sentence that fits on one line.

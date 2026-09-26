@@ -37,7 +37,8 @@ Headless: launch with `rviz:=false` and plot the planned tool path instead.
 
 ```bash
 ros2 launch arctos_moveit_config demo.launch.py rviz:=false
-ros2 run arctos_moveit_config plan_blocks.py --plot /mnt/c/Users/<user>/OneDrive/Documents/arctos_tool_path.png
+mkdir -p ~/arctos_plots
+ros2 run arctos_moveit_config plan_blocks.py --plot ~/arctos_plots/arctos_tool_path.png
 ```
 
 | `--plot` output | Source |
