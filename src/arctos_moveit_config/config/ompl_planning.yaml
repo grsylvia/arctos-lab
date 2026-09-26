@@ -1,0 +1,26 @@
+planning_plugins:
+  - ompl_interface/OMPLPlanner
+request_adapters:
+  - default_planning_request_adapters/ResolveConstraintFrames
+  - default_planning_request_adapters/ValidateWorkspaceBounds
+  - default_planning_request_adapters/CheckStartStateBounds
+  - default_planning_request_adapters/CheckStartStateCollision
+response_adapters:
+  - default_planning_response_adapters/AddTimeOptimalParameterization
+  - default_planning_response_adapters/ValidateSolution
+  - default_planning_response_adapters/DisplayMotionPath
+planner_configs:
+  RRTConnectkConfigDefault:
+    type: geometric::RRTConnect
+    range: 0.15
+arm:
+  # Apply the tuned RRTConnect settings when RViz leaves the planner unspecified.
+  default_planner_config: RRTConnectkConfigDefault
+  planner_configs: [RRTConnectkConfigDefault]
+  # Sample more densely near the narrow obstacle clearances.
+  longest_valid_segment_fraction: 0.0005
+# Minimize corner rounding; TOTG requires a strictly positive tolerance.
+totg:
+  path_tolerance: 0.000001
+  resample_dt: 0.02
+  min_angle_change: 0.0001

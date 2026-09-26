@@ -1,0 +1,57 @@
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+- Class: rviz_common/Views
+  Name: Views
+Visualization Manager:
+  Class: ''
+  Displays:
+  - Class: rviz_default_plugins/Grid
+    Name: Grid
+    Enabled: true
+    Cell Size: 0.05
+    Plane Cell Count: 20
+    Reference Frame: <Fixed Frame>
+  - Class: moveit_rviz_plugin/MotionPlanning
+    Name: MotionPlanning
+    Enabled: true
+    Robot Description: robot_description
+    Planning Scene Topic: /monitored_planning_scene
+    # Allow time to search around the closely spaced blocks.
+    MoveIt_Planning_Time: 60.0
+    # Use one search within the planning budget.
+    MoveIt_Planning_Attempts: 1
+    Planning Request:
+      Planning Group: arm
+      Interactive Marker Size: 0.15
+    Planned Path:
+      Trajectory Topic: /display_planned_path
+      Loop Animation: false
+      Robot Alpha: 0.4
+    Scene Geometry:
+      Scene Alpha: 1.0
+    Scene Robot:
+      Robot Alpha: 1.0
+  Global Options:
+    Fixed Frame: world
+    Background Color: 48; 48; 48
+    Frame Rate: 30
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Name: Current View
+      Distance: 1.6
+      Focal Point:
+        X: 0.12
+        Y: 0.0
+        Z: 0.4
+      Pitch: 0.4
+      Yaw: 0.8
+  Tools:
+  - Class: rviz_default_plugins/MoveCamera
+  - Class: rviz_default_plugins/Interact
+  - Class: rviz_default_plugins/Select
+  - Class: rviz_default_plugins/FocusCamera
+Window Geometry:
+  Width: 1200
+  Height: 800

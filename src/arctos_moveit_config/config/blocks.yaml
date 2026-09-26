@@ -1,0 +1,5 @@
+# Stagger 8 cm blocks around the wrist's sweep; positions are in base_link metres.
+blocks:
+  - {name: block_1, position: [0.29, 0.12, 0.56], size: [0.08, 0.08, 0.08]}
+  - {name: block_2, position: [0.23, 0.20, 0.66], size: [0.08, 0.08, 0.08]}
+  - {name: block_3, position: [0.27, 0.17, 0.46], size: [0.08, 0.08, 0.08]}

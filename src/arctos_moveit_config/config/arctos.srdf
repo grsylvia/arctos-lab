@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<robot name="arctos">
+  <virtual_joint name="fixed_base" type="fixed" parent_frame="world" child_link="base_link"/>
+  <group name="arm">
+    <chain base_link="base_link" tip_link="tool0"/>
+  </group>
+  <group_state name="home" group="arm">
+    <joint name="joint_1" value="0"/>
+    <joint name="joint_2" value="0"/>
+    <joint name="joint_3" value="0"/>
+    <joint name="joint_4" value="0"/>
+    <joint name="joint_5" value="0"/>
+    <joint name="joint_6" value="0"/>
+  </group_state>
+  <group_state name="across_blocks" group="arm">
+    <joint name="joint_1" value="1.0"/>
+    <joint name="joint_2" value="0"/>
+    <joint name="joint_3" value="0"/>
+    <joint name="joint_4" value="0"/>
+    <joint name="joint_5" value="0"/>
+    <joint name="joint_6" value="0"/>
+  </group_state>
+  <!-- Demo exception for the reviewed 0.58 mm CAD overlap; physical fit remains unresolved. -->
+  <disable_collisions link1="elbow_link" link2="wrist_roll_link" reason="Adjacent"/>
+</robot>
