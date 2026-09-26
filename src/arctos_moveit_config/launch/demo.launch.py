@@ -9,40 +9,44 @@ from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
+# Placeholder effort limit for mock control, not a hardware rating.
+MOCK_EFFORT = '10'
 
-def generate_launch_description():
-    share = Path(get_package_share_directory('arctos_moveit_config'))
-    description = Path(get_package_share_directory('arctos_description'))
-    config = share / 'config'
-    root = ET.fromstring((description / 'urdf/arctos.urdf').read_text())
+
+def load_yaml(path):
+    return yaml.safe_load(path.read_text())
+
+
+def mock_robot_description(urdf, joint_limits):
+    """Add mock ros2_control and the demo velocity limits to the URDF, in memory only."""
+    root = ET.fromstring(urdf.read_text())
     control = ET.SubElement(root, 'ros2_control', name='ArctosMock', type='system')
-    hardware = ET.SubElement(control, 'hardware')
-    ET.SubElement(hardware, 'plugin').text = 'mock_components/GenericSystem'
-    limits = {}
+    ET.SubElement(ET.SubElement(control, 'hardware'), 'plugin').text = 'mock_components/GenericSystem'
     for joint in root.findall('joint'):
         if joint.get('type') != 'revolute':
             continue
         name = joint.get('name')
-        # These speeds and accelerations are demo assumptions, not hardware ratings.
-        joint.find('limit').set('velocity', '1.0')
-        joint.find('limit').set('effort', '10')
-        limits[name] = {'has_velocity_limits': True, 'max_velocity': 1.0,
-                        'has_acceleration_limits': True, 'max_acceleration': 1.0}
-        controlled = ET.SubElement(control, 'joint', name=name)
-        ET.SubElement(controlled, 'command_interface', name='position')
-        position = ET.SubElement(controlled, 'state_interface', name='position')
+        joint.find('limit').set('velocity', str(joint_limits[name]['max_velocity']))
+        joint.find('limit').set('effort', MOCK_EFFORT)
+        interfaces = ET.SubElement(control, 'joint', name=name)
+        ET.SubElement(interfaces, 'command_interface', name='position')
+        position = ET.SubElement(interfaces, 'state_interface', name='position')
         ET.SubElement(position, 'param', name='initial_value').text = '0.0'
-        ET.SubElement(controlled, 'state_interface', name='velocity')
-    robot = {'robot_description': ET.tostring(root, encoding='unicode')}
+        ET.SubElement(interfaces, 'state_interface', name='velocity')
+    return ET.tostring(root, encoding='unicode')
+
+
+def generate_launch_description():
+    config = Path(get_package_share_directory('arctos_moveit_config')) / 'config'
+    urdf = Path(get_package_share_directory('arctos_description')) / 'urdf/arctos.urdf'
+    limits = load_yaml(config / 'joint_limits.yaml')
+    robot = {'robot_description': mock_robot_description(urdf, limits['joint_limits'])}
     semantic = {'robot_description_semantic': (config / 'arctos.srdf').read_text()}
-    kinematics = {'robot_description_kinematics': yaml.safe_load((config / 'kinematics.yaml').read_text())}
-    planning = {'robot_description_planning': {
-        'joint_limits': limits,
-        'default_velocity_scaling_factor': 1.0,
-        'default_acceleration_scaling_factor': 1.0}}
+    kinematics = {'robot_description_kinematics': load_yaml(config / 'kinematics.yaml')}
+    planning = {'robot_description_planning': limits}
     pipelines = {'planning_pipelines': ['ompl'], 'default_planning_pipeline': 'ompl',
-                 'ompl': yaml.safe_load((config / 'ompl_planning.yaml').read_text())}
-    controllers = yaml.safe_load((config / 'moveit_controllers.yaml').read_text())
+                 'ompl': load_yaml(config / 'ompl_planning.yaml')}
+    controllers = load_yaml(config / 'moveit_controllers.yaml')
     return LaunchDescription([
         DeclareLaunchArgument('rviz', default_value='true'),
         Node(package='robot_state_publisher', executable='robot_state_publisher', parameters=[robot]),

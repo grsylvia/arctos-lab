@@ -8,7 +8,7 @@
 | Search budget | 60 seconds, one attempt; path validation adds time |
 | Execution | ros2_control `mock_components/GenericSystem`; no physics or hardware driver |
 | Obstacles | Three fixed 8 cm blocks staggered around the wrist's sweep |
-| Demo limits | 1.0 rad/s, 1.0 rad/s² (provisional); RViz and script default to 100% scaling |
+| Demo limits | `config/joint_limits.yaml`: 1.0 rad/s, 1.0 rad/s² (provisional); RViz and script use 100% scaling |
 | Collision exception | Elbow ↔ wrist roll only; reviewed source-CAD overlap remains unresolved |
 
 The launch adds mock control and nonzero speed limits in memory; the source URDF
@@ -33,20 +33,8 @@ ros2 run arctos_moveit_config plan_blocks.py --execute
 ros2 run arctos_moveit_config plan_blocks.py --execute --target home
 ```
 
-Headless: launch with `rviz:=false` and plot the planned tool path instead.
-
-```bash
-ros2 launch arctos_moveit_config demo.launch.py rviz:=false
-mkdir -p ~/arctos_plots
-ros2 run arctos_moveit_config plan_blocks.py --plot ~/arctos_plots/arctos_tool_path.png
-```
-
-| `--plot` output | Source |
-| --- | --- |
-| `tool0` path (blue), start/goal | MoveIt `/compute_fk` at every validated sample, `base_link` frame |
-| Grey boxes | `config/blocks.yaml` |
-
-Omit `--execute` to preview only. The script checks start/goal validity, reports
+`--target` accepts any `arm` group state in `config/arctos.srdf`. For headless use, launch with
+`rviz:=false`. Omit `--execute` to preview only. The script checks start/goal validity, reports
 contacts on direct joint interpolation, and checks the timed path at joint-space
 intervals no larger than 0.01 rad before execution. This is sampled validation,
 not a continuous collision proof. A rejected path is not executed.
