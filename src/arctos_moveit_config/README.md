@@ -33,6 +33,18 @@ ros2 run arctos_moveit_config plan_blocks.py --execute
 ros2 run arctos_moveit_config plan_blocks.py --execute --target home
 ```
 
+Headless: launch with `rviz:=false` and plot the planned tool path instead.
+
+```bash
+ros2 launch arctos_moveit_config demo.launch.py rviz:=false
+ros2 run arctos_moveit_config plan_blocks.py --plot /mnt/c/Users/<user>/OneDrive/Documents/arctos_tool_path.png
+```
+
+| `--plot` output | Source |
+| --- | --- |
+| `tool0` path (blue), start/goal | MoveIt `/compute_fk` at every validated sample, `base_link` frame |
+| Grey boxes | `config/blocks.yaml` |
+
 Omit `--execute` to preview only. The script checks start/goal validity, reports
 contacts on direct joint interpolation, and checks the timed path at joint-space
 intervals no larger than 0.01 rad before execution. This is sampled validation,

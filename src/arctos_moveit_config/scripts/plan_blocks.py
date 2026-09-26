@@ -14,10 +14,12 @@ from ament_index_python.packages import get_package_share_directory
 from geometry_msgs.msg import Pose
 from moveit_msgs.action import ExecuteTrajectory
 from moveit_msgs.msg import CollisionObject, Constraints, JointConstraint, RobotState
-from moveit_msgs.srv import ApplyPlanningScene, GetMotionPlan, GetStateValidity
+from moveit_msgs.srv import ApplyPlanningScene, GetMotionPlan, GetPositionFK, GetStateValidity
 from sensor_msgs.msg import JointState
 from shape_msgs.msg import SolidPrimitive
 from std_msgs.msg import String
+
+from tool_path_plot import plot_tool_path
 
 NAMES = [f'joint_{i}' for i in range(1, 7)]
 
@@ -76,7 +78,8 @@ class Demo:
         request = ApplyPlanningScene.Request()
         request.scene.is_diff = True
         request.scene.robot_state.is_diff = True
-        for block in yaml.safe_load(config.read_text())['blocks']:
+        self.blocks = yaml.safe_load(config.read_text())['blocks']
+        for block in self.blocks:
             obstacle = CollisionObject()
             obstacle.header.frame_id = 'base_link'
             obstacle.id = block['name']
@@ -91,7 +94,22 @@ class Demo:
             raise RuntimeError('MoveIt rejected the block scene')
         self.node.get_logger().info('Three fixed blocks applied to the MoveIt planning scene')
 
-    def run(self, execute, target):
+    def tool_path(self, samples):
+        fk = self.client(GetPositionFK, '/compute_fk')
+        path = []
+        for values in samples:
+            request = GetPositionFK.Request()
+            request.header.frame_id = 'base_link'
+            request.fk_link_names = ['tool0']
+            request.robot_state = self.robot_state(values)
+            response = self.wait(fk.call_async(request))
+            if response.error_code.val != 1:
+                raise RuntimeError(f'FK failed: MoveIt error {response.error_code.val}')
+            point = response.pose_stamped[0].pose.position
+            path.append((point.x, point.y, point.z))
+        return path
+
+    def run(self, execute, target, plot):
         deadline = time.monotonic() + 15
         while (self.positions is None or not self.mock) and time.monotonic() < deadline:
             rclpy.spin_once(self.node, timeout_sec=0.1)
@@ -140,7 +158,7 @@ class Demo:
             raise RuntimeError('Planner returned an empty trajectory')
         order = [trajectory.joint_trajectory.joint_names.index(name) for name in NAMES]
         previous = start
-        checked = 0
+        samples = [start]
         # Check the timed output as well as its interpolated segments at <= 0.01 rad increments.
         for point in points:
             current = [point.positions[i] for i in order]
@@ -150,9 +168,13 @@ class Demo:
                 values = [a + alpha * (b-a) for a, b in zip(previous, current)]
                 if not self.valid(values).valid:
                     raise RuntimeError('Post-planning collision validation failed; execution refused')
-                checked += 1
+                samples.append(values)
             previous = current
-        self.node.get_logger().info(f'Validated {checked} path samples; {len(points)} trajectory points')
+        self.node.get_logger().info(
+            f'Validated {len(samples) - 1} path samples; {len(points)} trajectory points')
+        if plot:
+            plot_tool_path(self.tool_path(samples), self.blocks, plot, f'tool0 path to {target}')
+            self.node.get_logger().info(f'Tool path plot saved to {plot}')
         if not execute:
             return
         if max(abs(a-b) for a, b in zip(self.positions, start)) > 0.01:
@@ -185,6 +207,7 @@ def main():
     parser.add_argument('--scene-only', action='store_true')
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--target', choices=['home', 'across_blocks'], default='across_blocks')
+    parser.add_argument('--plot', metavar='PNG', help='save a 3D tool0 path plot to this file')
     args, ros_args = parser.parse_known_args()
     rclpy.init(args=ros_args)
     demo = None
@@ -192,7 +215,7 @@ def main():
         demo = Demo()
         demo.add_blocks()
         if not args.scene_only:
-            demo.run(args.execute, args.target)
+            demo.run(args.execute, args.target, args.plot)
     except Exception as error:
         if demo:
             demo.node.get_logger().error(str(error))
