@@ -105,6 +105,12 @@
     </visual>
   </link>
 
+  <!-- Define the tool-mounting face frame, X out of the face (ROS-Industrial flange). -->
+  <link name="flange"/>
+
+  <!-- Define the tool frame, Z out of the face (ROS-Industrial tool0). -->
+  <link name="tool0"/>
+
   <!-- Connect shoulder_link to its parent through joint_1. -->
   <joint name="joint_1" type="revolute">
     <!-- Identify the upstream rigid link. -->
@@ -115,8 +121,8 @@
     <origin xyz="0 0 0.129906" rpy="0 0 0"/>
     <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 0 1"/>
-    <!-- No CAD stop; provisional ±90° travel, effort and speed unverified. -->
-    <limit lower="-1.570796" upper="1.570796" effort="0" velocity="0"/>
+    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
+    <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
   </joint>
 
   <!-- Connect upper_arm_link to its parent through joint_2. -->
@@ -129,8 +135,8 @@
     <origin xyz="0.020885 0 0.157722" rpy="0 0 0"/>
     <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 1 0"/>
-    <!-- CAD self-collision stops −82°/+130° less 10° margin; effort and speed unverified. -->
-    <limit lower="-1.256637" upper="2.094395" effort="0" velocity="0"/>
+    <!-- joint_limits.py: collisions at −80.2° (shoulder), +75.9° (tool on base) ÷ 1.5; effort, speed unverified. -->
+    <limit lower="-0.933024" upper="0.883573" effort="0" velocity="0"/>
   </joint>
 
   <!-- Connect elbow_link to its parent through joint_3. -->
@@ -143,8 +149,8 @@
     <origin xyz="-0.00131 0.000065 0.261007" rpy="0 0 0"/>
     <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 1 0"/>
-    <!-- CAD stop +69° less 10° margin, provisional −90°; effort and speed unverified. -->
-    <limit lower="-1.570796" upper="1.029744" effort="0" velocity="0"/>
+    <!-- joint_limits.py: collisions at −203.7° and +69.0° (upper arm) ÷ 1.5; effort and speed unverified. -->
+    <limit lower="-2.370012" upper="0.802851" effort="0" velocity="0"/>
   </joint>
 
   <!-- Connect wrist_roll_link to its parent through joint_4. -->
@@ -157,8 +163,8 @@
     <origin xyz="0.135759 0 0.021705" rpy="0 0 0"/>
     <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="1 0 0"/>
-    <!-- No CAD stop; provisional ±90° travel, effort and speed unverified. -->
-    <limit lower="-1.570796" upper="1.570796" effort="0" velocity="0"/>
+    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
+    <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
   </joint>
 
   <!-- Connect wrist_pitch_link to its parent through joint_5. -->
@@ -171,8 +177,8 @@
     <origin xyz="0.128424 0.000244 -0.001774" rpy="0 0 0"/>
     <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="0 1 0"/>
-    <!-- No CAD stop; provisional ±90° travel, effort and speed unverified. -->
-    <limit lower="-1.570796" upper="1.570796" effort="0" velocity="0"/>
+    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
+    <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
   </joint>
 
   <!-- Connect tool_link to its parent through joint_6. -->
@@ -185,7 +191,27 @@
     <origin xyz="0.035835 0 0" rpy="0 0 0"/>
     <!-- Set the rotation axis in the joint frame. -->
     <axis xyz="1 0 0"/>
-    <!-- No CAD stop; provisional ±90° travel, effort and speed unverified. -->
-    <limit lower="-1.570796" upper="1.570796" effort="0" velocity="0"/>
+    <!-- joint_limits.py: no collision within 360°, so ±180°; effort and speed unverified. -->
+    <limit lower="-3.141593" upper="3.141593" effort="0" velocity="0"/>
+  </joint>
+
+  <!-- Fix the flange to tool_link on its mounting face. -->
+  <joint name="joint_6-flange" type="fixed">
+    <!-- Identify the rotating tool link. -->
+    <parent link="tool_link"/>
+    <!-- Identify the flange frame. -->
+    <child link="flange"/>
+    <!-- Place the frame on the C-core outer face, 13 mm out along the joint_6 axis. -->
+    <origin xyz="0.013 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Fix tool0 to the flange, turned so Z points out of the face. -->
+  <joint name="flange-tool0" type="fixed">
+    <!-- Identify the flange frame. -->
+    <parent link="flange"/>
+    <!-- Identify the tool frame. -->
+    <child link="tool0"/>
+    <!-- Use the ROS-Industrial rotation: Z along flange X, X along flange Z. -->
+    <origin xyz="0 0 0" rpy="3.141593 -1.570796 0"/>
   </joint>
 </robot>

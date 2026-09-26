@@ -15,6 +15,14 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   <!-- Read geometry settings in the mesh preparation script. -->
   <exec_depend>python3-yaml</exec_depend>
+  <!-- Sample meshes and compute transforms in the joint limit script. -->
+  <exec_depend>python3-numpy</exec_depend>
+  <!-- Search nearby mesh points in the joint limit script. -->
+  <exec_depend>python3-scipy</exec_depend>
+  <!-- Locate the installed package share directory in the launch file. -->
+  <exec_depend>ament_index_python</exec_depend>
+  <!-- Provide launch arguments, conditions, and substitutions. -->
+  <exec_depend>launch</exec_depend>
   <!-- Run the Python launch description. -->
   <exec_depend>launch_ros</exec_depend>
   <!-- Publish link transforms from the URDF. -->
