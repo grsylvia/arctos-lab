@@ -13,3 +13,7 @@
 # Python bytecode
 __pycache__/
 *.py[cod]
+
+# Local tool state and slicer output
+/.claude/
+/result.json
