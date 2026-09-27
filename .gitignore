@@ -16,4 +16,5 @@ __pycache__/
 
 # Local tool state and slicer output
 /.claude/
+/.codex/
 /result.json
