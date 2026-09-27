@@ -1,24 +1,19 @@
-# Project resources
-
-**Use these resources when developing Arctos code or making hardware-related decisions.**
+# Resources
 
 | Resource | Use |
 | --- | --- |
-| [Arctos documentation](https://arctosrobotics.com/docs/) | Assembly, setup, and technical guidance |
-| [Arctos bill of materials (BOM)](https://arctosrobotics.com/bom/) | Components and hardware requirements |
-| Local CAD and STLs in `cad/` | Analyze geometry, dimensions, and joint placement to develop the URDF |
-| [Bambu Studio CLI](docs/BAMBU_CLI.md) | Use `bambu-studio` in WSL for local import, slicing, and export; run it from inside `cad/` so outputs, including `result.json`, stay there |
-| [Arctos print settings](docs/PRINTING_GUIDE.md) | Published print baseline, bundled-profile differences, and P1S starting settings |
-| [Project overview](docs/PROJECT_OVERVIEW.md) | Current status, what has been built, and why |
+| [Arctos docs](https://arctosrobotics.com/docs/) | Assembly, setup, technical reference |
+| [Arctos BOM](https://arctosrobotics.com/bom/) | Components and hardware |
+| `cad/` | Purchased CAD/STLs: geometry, dimensions, joint placement for the URDF |
+| [docs/BAMBU_CLI.md](docs/BAMBU_CLI.md) | `bambu-studio` in WSL; run from `cad/` so outputs (incl. `result.json`) stay there |
+| [docs/PRINTING_GUIDE.md](docs/PRINTING_GUIDE.md) | Print baseline, profile differences, P1S settings |
+| [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) | Current status, what's built, and why |
 
-`docs/` is kept local and Git-ignored, so these links work only in the local workspace.
+`docs/` is local-only (Git-ignored).
 
-# Project guidance
+# Rules
 
-- Markdown documentation must be concise, simple, and light on text. Prefer tables and visualizations over paragraphs when presenting data.
-- Keep code and configuration comments concise and useful: explain non-obvious intent, assumptions, units, or constraints. Document shared conventions once; avoid repeated comments and comments that merely restate a statement or setting.
-- Work step by step and only move forward on the user's command. When the user shares a goal or context, acknowledge it and wait; do not start writing code, creating files, or changing the workspace until the user says to take a specific step. Committing and pushing a finished step is part of that step.
-- Code generation is user-driven. Keep generated code and code changes constrained to the user's provided instructions. Do not anticipate or preemptively address issues, add features, or expand scope beyond those instructions.
-- Commit and push to GitHub as soon as a change is finished; do not wait to be asked. Ask first before destructive Git operations, such as force-pushing, deleting branches, or rewriting history.
-- **Use the purchased CAD and STLs for local analysis and as source material for the URDF.** Reading, measuring, and processing them locally is authorized; the restriction concerns publishing the assets, not using them for development. Geometry measurements may inform URDF code.
-- CRITICAL: Keep purchased CAD/STL assets and their copies, archives, and mesh exports local and excluded from Git; never publish them to GitHub or upload them to external services. Store derived mesh assets under `cad/` and reference them locally when needed. Do not stage, commit, force-add, or weaken the CAD exclusions (`cad/` and its original name, `arctos_cad/`).
+- **Wait for the go-ahead.** When the user shares a goal or context, acknowledge and wait. Do only the step asked: no extra features, preemptive fixes, or scope creep.
+- **Ship each step.** Commit and push when a step is done, without asking. Ask before force-push, branch deletion, or history rewrites.
+- **Keep it lean.** Markdown: short, tables/visuals over prose. Comments: only non-obvious intent, units, assumptions, or constraints; state shared conventions once.
+- **CAD stays local.** Reading, measuring, and deriving URDF geometry from `cad/` is allowed. Never commit, upload, or publish the CAD/STLs or their copies, archives, or mesh exports; keep derived meshes under `cad/`. Don't weaken the `cad/` and `arctos_cad/` Git exclusions.
