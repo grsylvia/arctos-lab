@@ -125,6 +125,5 @@ flowchart LR
 
 Sliders appear only for joints with a non-zero limit range.
 
-Reference: [Arctos docs](https://arctosrobotics.com/docs/) and
-[BOM](https://arctosrobotics.com/bom/). Geometry comes from local CAD; the BOM does
-not establish joint limits. Verify travel and assembly fit before enabling motion.
+Reference: [Arctos docs](https://arctosrobotics.com/docs/). Geometry comes from local CAD.
+Verify travel and assembly fit before enabling motion.

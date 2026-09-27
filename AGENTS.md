@@ -3,7 +3,6 @@
 | Resource | Use |
 | --- | --- |
 | [Arctos docs](https://arctosrobotics.com/docs/) | Assembly, setup, technical reference |
-| [Arctos BOM](https://arctosrobotics.com/bom/) | Components and hardware |
 | `cad/` | Purchased CAD/STLs: geometry, dimensions, joint placement for the URDF |
 | [docs/BAMBU_CLI.md](docs/BAMBU_CLI.md) | `bambu-studio` in WSL; run from `cad/` so outputs (incl. `result.json`) stay there |
 | [docs/PRINTING_GUIDE.md](docs/PRINTING_GUIDE.md) | Print baseline, profile differences, P1S settings |
